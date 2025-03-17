@@ -136,17 +136,85 @@ BANK_NAMES = [
     "Barclays", "Barclays Bank",
     "BDN","Bandhan Bank"
 ]
+TRANSACTIONAL_SENDERS = [
+    # Banks
+    "HDFCBK", "ICICIB", "SBIINB", "AXISBK", "CANBNK", "PNBSMS", "BOIIND", "KOTAKB", 
+    "INDBNK", "CENTBK", "UNIONB", "YESBNK", "IDBIBNK", "BOBSMS", "CORPBNK", "INDUSB", 
+    "DCBBNK", "RBLBNK", "FEDERALB", "KARNATABK", "SOUTHBNK", "TMBLBNK", "UJJIVNBNK",
+    "BARODABNK", "SYNDBNK", "PUNBBNK", "MAHBANK", "IOBCORP", "UCOBANK", "SVCBANK",
+    
+    # Payment Services
+    "PAYTMB", "PHONEPE", "GPAY", "GOOGLEPAY", "JioMoney", "Mobikwik", "CRED", "BHIMUPI", 
+    "AMAZONPAY", "FREECHARGE", "OLAMONEY", "LAZYPAYIN", "RAZORPAY", "PAYPAL", "STRIPE",
+    "MOBKWIK", "UPIBNK", "IPAYMBK", "YESBANK", "WALLETL", "UPICICI", "IMPSBNK",
+    
+    # Credit/Debit Card
+    "VISACARD", "MASTERCRD", "RUPAYCARD", "AMEXCARD", "DCBCARD", "HDFCCARD", "ICICICARD", 
+    "SBICARD", "AXISCARD", "BOBCARD", "INDUSCARD", "YESCARD", "AUCARD", "RBLCARD",
+    "KOTAKCARD", "PNBCARD", "HSBC", "CITIBANK", "CITICARD", "SCBCARD", "ONECARD", 
 
-def is_transactional(message):
+]
+def is_transactional(message, sender=None):
     """
-    Determine if a message is transactional based on predefined keywords.
+    Determine if a message is transactional based on sender and content.
+    
+    Args:
+        message (str): The message content
+        sender (str): The sender ID/name (optional)
+    
+    Returns:
+        bool: True if transactional, False otherwise
     """
-    message_lower = message.lower()  # Convert message to lowercase once
-
-    # Check for non-transactional keywords first (faster elimination)
+    # If sender is provided, check if it's a known transactional sender
+    if sender is not None:
+        sender = sender.upper()  # Normalize sender name
+        
+        # Check if it's a known transactional sender
+        if any(trans_sender in sender for trans_sender in TRANSACTIONAL_SENDERS):
+            return True
+        
+        # Check if it's a numeric sender (typically used by banks/businesses)
+        if any(char.isdigit() for char in sender) and len(sender) <= 6:
+            return True
+            
+        # Check if it's a sender ID in VM-XXXXXX format (common for Indian bank SMS)
+        if re.match(r'^[A-Z]{2}-[A-Z0-9]{6}$', sender):
+            return True
+        
+        # If sender appears to be a personal contact, treat as non-transactional
+        if sender.isalpha() and len(sender) > 3:  # Simple heuristic for personal names
+            return False
+    
+    # If no conclusive determination from sender, fall back to content analysis
+    message_lower = message.lower()
+    
+    # Additional contextual checks to identify personal messages
+    personal_indicators = [
+        r"sent you \d+",         # Matches "sent you 100"
+        r"i sent",               # Matches "I sent"
+        r"i've sent",            # Matches "I've sent"
+        r"sending you",          # Matches "sending you"
+        r"let me know",          # Common in personal messages
+        r"how are you",          # Common in personal messages
+        r"call me",              # Common in personal messages
+        r"meet up",              # Common in personal messages
+        r"miss you",             # Common in personal messages
+        r"love you",             # Common in personal messages
+        r"see you",              # Common in personal messages
+        r"talk to you",          # Common in personal messages
+        r"tell me",              # Common in personal messages
+        r"what's up",            # Common in personal messages
+        r"how's it going"        # Common in personal messages
+    ]
+    
+    # Check for personal message indicators
+    if any(re.search(pattern, message_lower) for pattern in personal_indicators):
+        return False
+    
+    # Check for non-transactional keywords
     if any(re.search(pattern, message_lower) for pattern in NON_TRANSACTIONAL_KEYWORDS):
         return False
-
+        
     # Check for transactional keywords
     return any(re.search(pattern, message_lower) for pattern in TRANSACTION_KEYWORDS)
 
