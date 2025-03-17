@@ -161,21 +161,19 @@ def extract_transaction_details(message):
       amount = None
 
         
-
-    transaction_date = None
-    # Extract Transaction Date (Handles different formats)
     transaction_date = None
     # Extract Transaction Date (Handles different formats)
     date_patterns = [
-        r"(\d{2}[-/]\d{2}[-/]\d{2,4})",    # dd/mm/yy, dd/mm/yyyy, dd-mm-yy, dd-mm-yyyy
-        r"(\d{2}\.\d{2}\.\d{2,4})",        # dd.mm.yy, dd.mm.yyyy
-        r"(\d{2}[A-Za-z]{3}\d{2,4})",      # ddmmmyy, ddmmmyyyy (e.g., 15MAR25)
-        r"([A-Za-z]{3}\d{2}\d{2,4})",      # mmmddyy, mmmddyyyy (e.g., MAR1525)
-        r"(\d{2}/\d{2}/\d{2,4})",          # mm/dd/yy, mm/dd/yyyy
-        r"(\d{2}-\d{2}-\d{2,4})",          # mm-dd-yy, mm-dd-yyyy
-        r"(\d{2}\d{2}\d{2})",              # ddmmyy (without separator, e.g., 150325)
-        r"(\d{2}\.\d{2}\.\d{4})",          # mm.dd.yyyy
-        r"(\d{2}\.\d{2}\.\d{2})",          # mm.dd.yy
+        r"(\d{2}[-/]\d{2}[-/]\d{2,4})",     # dd/mm/yy, dd/mm/yyyy, dd-mm-yy, dd-mm-yyyy
+        r"(\d{2}\.\d{2}\.\d{2,4})",         # dd.mm.yy, dd.mm.yyyy
+        r"(\d{2}[A-Za-z]{3}\d{2,4})",       # ddmmmyy, ddmmmyyyy (e.g., 15MAR25)
+        r"([A-Za-z]{3}\d{2}\d{2,4})",       # mmmddyy, mmmddyyyy (e.g., MAR1525)
+        r"(\d{2}/\d{2}/\d{2,4})",           # mm/dd/yy, mm/dd/yyyy
+        r"(\d{2}-\d{2}-\d{2,4})",           # mm-dd-yy, mm-dd-yyyy
+        r"(\d{2}\d{2}\d{2})",               # ddmmyy (without separator, e.g., 150325)
+        r"(\d{2}\.\d{2}\.\d{4})",           # mm.dd.yyyy
+        r"(\d{2}\.\d{2}\.\d{2})",           # mm.dd.yy
+        r"(\d{2}[/.-][A-Za-z]{3}[/.-]\d{2,4})",  # dd/mmm/yy, dd/mmm/yyyy, dd-mmm-yy, dd-mmm-yyyy, dd.mmm.yy, dd.mmm.yyyy
     ]
 
     # Search for a date pattern in the text
@@ -184,8 +182,6 @@ def extract_transaction_details(message):
         if match:
             date_str = match.group(1)
             break
-    else:
-        return None  # Return None if no date is found
 
     # List of possible date formats to handle different cases
     date_formats = [
@@ -197,6 +193,9 @@ def extract_transaction_details(message):
         "%m-%d-%y", "%m-%d-%Y",  # mm-dd-yy, mm-dd-yyyy
         "%m.%d.%y", "%m.%d.%Y",  # mm.dd.yy, mm.dd.yyyy
         "%d%m%y",                # ddmmyy
+        "%d/%b/%y", "%d/%b/%Y",  # dd/mmm/yy, dd/mmm/yyyy
+        "%d-%b-%y", "%d-%b-%Y",  # dd-mmm-yy, dd-mmm-yyyy
+        "%d.%b.%y", "%d.%b.%Y",  # dd.mmm.yy, dd.mmm.yyyy
     ]
 
     # Try different date formats until successful
