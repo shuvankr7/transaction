@@ -176,12 +176,13 @@ def extract_transaction_details(message):
         r"(\d{2}[/.-][A-Za-z]{3}[/.-]\d{2,4})",  # dd/mmm/yy, dd/mmm/yyyy, dd-mmm-yy, dd-mmm-yyyy, dd.mmm.yy, dd.mmm.yyyy
     ]
 
-    # Search for a date pattern in the text
     for pattern in date_patterns:
         match = re.search(pattern, message)
         if match:
             date_str = match.group(1)
             break
+    else:
+        date_str = None
 
     # List of possible date formats to handle different cases
     date_formats = [
