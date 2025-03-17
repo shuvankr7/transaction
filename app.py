@@ -440,8 +440,8 @@ def extract_transaction_details(message):
             category= c
     tags=[t,category]
     tags.remove(None)
-    if transaction_type and card_type == 'Debit Card':
-        transaction_type = 'Debit'
+    if transaction_type == None and card_type == "Debit Card":
+        transaction_type = "Debit"
 
     return {
         "Amount": amount,
