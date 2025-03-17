@@ -310,7 +310,7 @@ def extract_transaction_details(message):
         card_type = "Credit Card"
     elif re.search(r"Debit Card", message, re.IGNORECASE):
         card_type = "Debit Card"
-    elif re.search(r"Avl Lmt", message, re.IGNORECASE):  
+    elif re.search(r"\b(Avl Lmt|Available Limit|Avlbl Lmt|avl limit)\b", message, re.IGNORECASE):
         card_type = "Credit Card"
     elif re.search(r"Avl Bal", message, re.IGNORECASE):  
         card_type = "Debit Card"
