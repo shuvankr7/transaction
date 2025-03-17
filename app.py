@@ -80,7 +80,14 @@ TRANSACTION_KEYWORDS = [
     r"\bpurchase\b", r"Rs\.?\s?\d+", r"\bsent\b", r"\breceived\b",
     r"\bpaid\b", r"\bwithdrawn\b", r"\bdeposited\b", r"\bcharged\b",
     r"\btransferred\b", r"\bbalance\b", r"\bupi\b", r"\bimps\b",
-    r"\bneft\b", r"\brefunded\b", r"\bfailed\b"
+    r"\bneft\b", r"\brefunded\b", r"\bfailed\b",
+    r"\bused for Rs\d+", 
+    r"\bused for INR\d+",
+    r"\bCard X\d+",
+    r"\bTxn#\d+",
+    r"X\d{4} used",
+    r"to block Card",
+    r"\bat\d+",
 ]
 
 # Non-Transactional Keywords
