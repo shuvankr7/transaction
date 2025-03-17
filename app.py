@@ -4,12 +4,7 @@ import spacy
 import streamlit as st
 
 spacy_model = "en_core_web_sm"
-try:
-    nlp = spacy.load(spacy_model)
-except OSError:
-    st.write("Downloading spaCy model...")
-    subprocess.run(["python", "-m", "spacy", "download", spacy_model])
-    nlp = spacy.load(spacy_model)
+nlp = spacy.load(spacy_model)
 
 
 f = open('https://github.com/shuvankr7/transaction/blob/main/final_merchant_dataset.json')
