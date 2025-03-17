@@ -3,9 +3,21 @@ import json
 import spacy
 import streamlit as st
 
-nlp = spacy.load("en_core_web_sm")
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    st.write("Downloading spaCy model...")
+    os.system("python -m spacy download en_core_web_sm")
+    nlp = spacy.load("en_core_web_sm")
 f = open('https://github.com/shuvankr7/transaction/blob/main/final_merchant_dataset.json')
-tag = json.load(f)
+url = "https://raw.githubusercontent.com/shuvankr7/transaction/main/final_merchant_dataset.json"
+response = requests.get(url)
+
+if response.status_code == 200:
+    tag = response.json()
+else:
+    st.write("Failed to load merchant dataset.")
+    tag = {}
 
 category_keywords = {
     "Food & Dining": ["restaurant", "food", "dinner", "lunch", "pizza", "cafe", "bar", "mcdonald"],
