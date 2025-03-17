@@ -334,9 +334,9 @@ def extract_transaction_details(message):
     # Extract Transaction Type (Credit/Debit)
     transaction_type = None
     message_lower = message.lower()
-    if any(word in message_lower for word in ["spent", "debited", "payment", "used at", "charged", "sent"]):
+    if any(word in message_lower for word in ["spent", "debited", "payment", "used at", "charged", "sent","debit"]):
         transaction_type = "Debit"
-    elif any(word in message_lower for word in ["credited", "received", "refund", "reversed"]):
+    elif any(word in message_lower for word in ["credited", "received", "refund", "reversed","credit"]):
         transaction_type = "Credit"
 
     # Extract Bank Name (Using predefined list)
