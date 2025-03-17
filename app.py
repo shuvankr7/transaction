@@ -7,13 +7,18 @@ spacy_model = "en_core_web_sm"
 nlp = spacy.load(spacy_model)
 
 
-url = "https://raw.githubusercontent.com/shuvankr7/transaction/main/final_merchant_dataset.json"
-response = requests.get(url)
-
-if response.status_code == 200:
-    tag = response.json()
-else:
-    st.write("Failed to load merchant dataset.")
+try:
+    url = "https://raw.githubusercontent.com/shuvankr7/transaction/main/final_merchant_dataset.json"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        tag = response.json()
+    else:
+        st.error(f"Failed to load merchant dataset. Status code: {response.status_code}")
+        tag = {}
+except Exception as e:
+    st.error(f"Error loading merchant dataset: {str(e)}")
+    # Fallback to empty dictionary if there's an error
     tag = {}
 
 category_keywords = {
