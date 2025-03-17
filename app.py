@@ -7,7 +7,6 @@ spacy_model = "en_core_web_sm"
 nlp = spacy.load(spacy_model)
 
 
-f = open('https://github.com/shuvankr7/transaction/blob/main/final_merchant_dataset.json')
 url = "https://raw.githubusercontent.com/shuvankr7/transaction/main/final_merchant_dataset.json"
 response = requests.get(url)
 
