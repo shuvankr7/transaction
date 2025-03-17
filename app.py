@@ -1,3 +1,7 @@
+!pip install spacy
+python -m spacy download en_core_web_sm
+!pip install json
+!pip install re
 import re
 import json
 import spacy
