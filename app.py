@@ -114,11 +114,7 @@ category_keywords = {
         "covid test", "therapy", "vaccination", "fitness", "gym", "insurance premium"
     ],
     
-    "Education": [
-        "school fees", "college fees", "coaching", "books", "stationery", "tuition", 
-        "exam fee", "online course", "udemy", "coursera", "byju’s", "unacademy",
-        "kindle", "e-learning", "library", "notebooks", "pen", "education loan"
-    ],
+
     
     
     "Other": []
