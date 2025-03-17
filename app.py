@@ -3,12 +3,15 @@ import json
 import spacy
 import streamlit as st
 
+spacy_model = "en_core_web_sm"
 try:
-    nlp = spacy.load("en_core_web_sm")
+    nlp = spacy.load(spacy_model)
 except OSError:
     st.write("Downloading spaCy model...")
-    os.system("python -m spacy download en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+    subprocess.run(["python", "-m", "spacy", "download", spacy_model])
+    nlp = spacy.load(spacy_model)
+
+
 f = open('https://github.com/shuvankr7/transaction/blob/main/final_merchant_dataset.json')
 url = "https://raw.githubusercontent.com/shuvankr7/transaction/main/final_merchant_dataset.json"
 response = requests.get(url)
