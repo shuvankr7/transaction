@@ -161,12 +161,34 @@ def extract_transaction_details(message):
 
         
 
-
-
-
+    transaction_date = None
     # Extract Transaction Date (Handles different formats)
-    date_match = re.search(r"\b(\d{2}[-/]\d{2}[-/]\d{2,4})\b", message)
-    transaction_date = date_match.group(1) if date_match else None
+    date_match = re.search(
+        r"(\b\d{2}[-/.]\d{2}[-/.]\d{2,4}\b"   # dd-mm-yy, dd/mm/yyyy, dd.mm.yy, etc.
+        r"|\b\d{2}[A-Z]{3}\d{2,4}\b"          # ddMMMyyyy, ddMMMyy (e.g., 15MAR25, 03JAN2024)
+        r"|\b[A-Z]{3}\d{2}\d{2,4}\b"          # MMMddyy, MMMddyyyy (e.g., MAR1519, JAN032024)
+        r"|\b\d{2}\d{2}\d{2}\b"               # ddmmyy (e.g., 150324)
+        r"|\b\d{2}[-/.]\d{2}[-/.]\d{2,4}\b"   # mm-dd-yyyy, mm/dd/yyyy
+        r")",
+        message
+    )
+
+    if date_match:
+        extracted_date = date_match.group(1)
+        
+        # List of possible date formats
+        date_formats = [
+            "%d-%m-%Y", "%d-%m-%y", "%d/%m/%Y", "%d/%m/%y", "%d.%m.%Y", "%d.%m.%y",
+            "%m-%d-%Y", "%m-%d-%y", "%m/%d/%Y", "%m/%d/%y", "%m.%d.%Y", "%m.%d.%y",
+            "%d%b%Y", "%d%b%y", "%b%d%Y", "%b%d%y", "%d%m%y", "%d%m%Y"
+        ]
+
+        for fmt in date_formats:
+            try:
+                parsed_date = datetime.strptime(extracted_date, fmt)
+                transaction_date = parsed_date.strftime("%d-%m-%y")  # Convert to dd-mm-yy format
+            except ValueError:
+                continue
 
     # Extract Transaction Type (Credit/Debit)
     transaction_type = None
