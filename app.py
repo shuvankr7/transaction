@@ -2,7 +2,6 @@ import re
 import json
 import spacy
 import streamlit as st
-import json
 
 nlp = spacy.load("en_core_web_sm")
 f = open('https://github.com/shuvankr7/transaction/blob/main/final_merchant_dataset.json')
