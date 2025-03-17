@@ -164,32 +164,49 @@ def extract_transaction_details(message):
 
     transaction_date = None
     # Extract Transaction Date (Handles different formats)
-    date_match = re.search(
-        r"(\b\d{2}[-/.]\d{2}[-/.]\d{2,4}\b"   # dd-mm-yy, dd/mm/yyyy, dd.mm.yy, etc.
-        r"|\b\d{2}[A-Z]{3}\d{2,4}\b"          # ddMMMyyyy, ddMMMyy (e.g., 15MAR25, 03JAN2024)
-        r"|\b[A-Z]{3}\d{2}\d{2,4}\b"          # MMMddyy, MMMddyyyy (e.g., MAR1519, JAN032024)
-        r"|\b\d{2}\d{2}\d{2}\b"               # ddmmyy (e.g., 150324)
-        r"|\b\d{2}[-/.]\d{2}[-/.]\d{2,4}\b"   # mm-dd-yyyy, mm/dd/yyyy
-        r")",
-        message
-    )
+    transaction_date = None
+    # Extract Transaction Date (Handles different formats)
+    date_patterns = [
+        r"(\d{2}[-/]\d{2}[-/]\d{2,4})",    # dd/mm/yy, dd/mm/yyyy, dd-mm-yy, dd-mm-yyyy
+        r"(\d{2}\.\d{2}\.\d{2,4})",        # dd.mm.yy, dd.mm.yyyy
+        r"(\d{2}[A-Za-z]{3}\d{2,4})",      # ddmmmyy, ddmmmyyyy (e.g., 15MAR25)
+        r"([A-Za-z]{3}\d{2}\d{2,4})",      # mmmddyy, mmmddyyyy (e.g., MAR1525)
+        r"(\d{2}/\d{2}/\d{2,4})",          # mm/dd/yy, mm/dd/yyyy
+        r"(\d{2}-\d{2}-\d{2,4})",          # mm-dd-yy, mm-dd-yyyy
+        r"(\d{2}\d{2}\d{2})",              # ddmmyy (without separator, e.g., 150325)
+        r"(\d{2}\.\d{2}\.\d{4})",          # mm.dd.yyyy
+        r"(\d{2}\.\d{2}\.\d{2})",          # mm.dd.yy
+    ]
 
-    if date_match:
-        extracted_date = date_match.group(1)
-        
-        # List of possible date formats
-        date_formats = [
-            "%d-%m-%Y", "%d-%m-%y", "%d/%m/%Y", "%d/%m/%y", "%d.%m.%Y", "%d.%m.%y",
-            "%m-%d-%Y", "%m-%d-%y", "%m/%d/%Y", "%m/%d/%y", "%m.%d.%Y", "%m.%d.%y",
-            "%d%b%Y", "%d%b%y", "%b%d%Y", "%b%d%y", "%d%m%y", "%d%m%Y"
-        ]
+    # Search for a date pattern in the text
+    for pattern in date_patterns:
+        match = re.search(pattern, message)
+        if match:
+            date_str = match.group(1)
+            break
+    else:
+        return None  # Return None if no date is found
 
-        for fmt in date_formats:
-            try:
-                parsed_date = datetime.strptime(extracted_date, fmt)
-                transaction_date = parsed_date.strftime("%d-%m-%y")  # Convert to dd-mm-yy format
-            except ValueError:
-                continue
+    # List of possible date formats to handle different cases
+    date_formats = [
+        "%d/%m/%y", "%d/%m/%Y", "%d-%m-%y", "%d-%m-%Y",  # dd/mm/yy, dd/mm/yyyy
+        "%d.%m.%y", "%d.%m.%Y",  # dd.mm.yy, dd.mm.yyyy
+        "%d%b%y", "%d%b%Y",      # ddmmmyy, ddmmmyyyy
+        "%b%d%y", "%b%d%Y",      # mmmddyy, mmmddyyyy
+        "%m/%d/%y", "%m/%d/%Y",  # mm/dd/yy, mm/dd/yyyy
+        "%m-%d-%y", "%m-%d-%Y",  # mm-dd-yy, mm-dd-yyyy
+        "%m.%d.%y", "%m.%d.%Y",  # mm.dd.yy, mm.dd.yyyy
+        "%d%m%y",                # ddmmyy
+    ]
+
+    # Try different date formats until successful
+    for fmt in date_formats:
+        try:
+            parsed_date = datetime.strptime(date_str, fmt)
+            formatted_date = parsed_date.strftime("%d-%m-%y")  # Convert to dd-mm-yy format
+            transaction_date = formatted_date
+        except ValueError:
+            continue
 
     # Extract Transaction Type (Credit/Debit)
     transaction_type = None
