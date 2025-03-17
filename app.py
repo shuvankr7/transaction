@@ -5,7 +5,7 @@ import streamlit as st
 import json
 
 nlp = spacy.load("en_core_web_sm")
-f = open('/content/final_merchant_dataset.json')
+f = open('https://github.com/shuvankr7/transaction/blob/main/final_merchant_dataset.json')
 tag = json.load(f)
 
 category_keywords = {
