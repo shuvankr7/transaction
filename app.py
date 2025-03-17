@@ -77,7 +77,10 @@ category_keywords = {
 }
 TRANSACTION_KEYWORDS = [
     r"\bspent\b", r"\bdebited\b", r"\bcredited\b", r"\btransaction\b",
-    r"\bpurchase\b", r"\bRs\.", r"\bsent\b", r"\breceived\b"
+    r"\bpurchase\b", r"Rs\.?\s?\d+", r"\bsent\b", r"\breceived\b",
+    r"\bpaid\b", r"\bwithdrawn\b", r"\bdeposited\b", r"\bcharged\b",
+    r"\btransferred\b", r"\bbalance\b", r"\bupi\b", r"\bimps\b",
+    r"\bneft\b", r"\brefunded\b", r"\bfailed\b"
 ]
 
 # Non-Transactional Keywords
@@ -130,7 +133,7 @@ BANK_NAMES = [
     "HSBC", "HSBC Bank",
     "DBS", "DBS Bank",
     "Deutsche", "Deutsche Bank",
-    "Barclays", "Barclays Bank"
+    "Barclays", "Barclays Bank",
     "BDN","Bandhan Bank"
 ]
 
