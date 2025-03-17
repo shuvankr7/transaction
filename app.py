@@ -67,7 +67,7 @@ else:
     st.error("Using a local fallback dataset since 'requests' is not available.")
 
 category_keywords = {
-    "Food & Dining": ["restaurant", "food", "dinner", "lunch", "pizza", "cafe", "bar", "mcdonald"],
+    "Food & Dining": ["restaurant", "food", "dinner", "lunch", "pizza", "cafe", "bar", "mcdonald","zomato","swiggy"],
     "Utilities": ["electricity bill", "water bill", "gas bill", "recharge", "broadband", "internet", "phone bill"],
     "Shopping": ["mall", "shopping", "amazon", "flipkart", "store", "clothing", "apparel"],
     "Transport": ["uber", "ola", "bus", "train", "flight", "petrol", "fuel", "cab"],
