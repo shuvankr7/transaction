@@ -131,6 +131,7 @@ BANK_NAMES = [
     "DBS", "DBS Bank",
     "Deutsche", "Deutsche Bank",
     "Barclays", "Barclays Bank"
+    "BDN","Bandhan Bank"
 ]
 
 def is_transactional(message):
