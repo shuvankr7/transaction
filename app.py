@@ -2,11 +2,21 @@ import re
 import json
 import spacy
 import streamlit as st
+st.set_page_config(
+    page_title="Transaction Analyzer",
+    page_icon="💳",
+)
 
 spacy_model = "en_core_web_sm"
-nlp = spacy.load(spacy_model)
+try:
+    nlp = spacy.load(spacy_model)
+except:
+    st.error(f"Failed to load spaCy model: {spacy_model}")
+    st.info("Downloading spaCy model...")
+    spacy.cli.download(spacy_model)
+    nlp = spacy.load(spacy_model)
 
-
+# Use requests to fetch the file from GitHub with error handling
 try:
     url = "https://raw.githubusercontent.com/shuvankr7/transaction/main/final_merchant_dataset.json"
     response = requests.get(url)
@@ -248,10 +258,7 @@ def extract_transaction_details(message):
     }
 
 
-st.set_page_config(
-    page_title="Hi",
-    page_icon="👋",
-)
+
 msg = st.text_input('Enter your messege: ')
 
 if st.button('Predict'):
