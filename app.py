@@ -7,29 +7,63 @@ st.set_page_config(
     page_icon="💳",
 )
 
+# spacy_model = "en_core_web_sm"
+# try:
+#     nlp = spacy.load(spacy_model)
+# except:
+#     st.error(f"Failed to load spaCy model: {spacy_model}")
+#     st.info("Downloading spaCy model...")
+#     spacy.cli.download(spacy_model)
+#     nlp = spacy.load(spacy_model)
+
+# # Use requests to fetch the file from GitHub with error handling
+# try:
+#     url = "https://raw.githubusercontent.com/shuvankr7/transaction/main/final_merchant_dataset.json"
+#     response = requests.get(url)
+    
+#     if response.status_code == 200:
+#         tag = response.json()
+#     else:
+#         st.error(f"Failed to load merchant dataset. Status code: {response.status_code}")
+#         tag = {}
+# except Exception as e:
+#     st.error(f"Error loading merchant dataset: {str(e)}")
+#     # Fallback to empty dictionary if there's an error
+#     tag = {}
+try:
+    import requests
+except ImportError:
+    st.error("The 'requests' package is not installed. Please add it to your requirements.txt file.")
+    # Define a mock requests object to prevent errors
+    class MockRequests:
+        def get(self, url):
+            return None
+    requests = MockRequests()
+
 spacy_model = "en_core_web_sm"
 try:
     nlp = spacy.load(spacy_model)
-except:
-    st.error(f"Failed to load spaCy model: {spacy_model}")
-    st.info("Downloading spaCy model...")
-    spacy.cli.download(spacy_model)
-    nlp = spacy.load(spacy_model)
-
-# Use requests to fetch the file from GitHub with error handling
-try:
-    url = "https://raw.githubusercontent.com/shuvankr7/transaction/main/final_merchant_dataset.json"
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        tag = response.json()
-    else:
-        st.error(f"Failed to load merchant dataset. Status code: {response.status_code}")
-        tag = {}
 except Exception as e:
-    st.error(f"Error loading merchant dataset: {str(e)}")
-    # Fallback to empty dictionary if there's an error
-    tag = {}
+    st.error(f"Failed to load spaCy model: {str(e)}")
+    # Continue without NLP functionality
+
+# Create a hardcoded fallback for the merchant dataset
+tag = {}  # Empty dictionary as fallback
+
+# Try to fetch the dataset only if requests is available
+if requests.__class__.__name__ != "MockRequests":
+    try:
+        url = "https://raw.githubusercontent.com/shuvankr7/transaction/main/final_merchant_dataset.json"
+        response = requests.get(url)
+        
+        if response and hasattr(response, 'status_code') and response.status_code == 200:
+            tag = response.json()
+        else:
+            st.error(f"Failed to load merchant dataset. Status code: {getattr(response, 'status_code', 'unknown')}")
+    except Exception as e:
+        st.error(f"Error loading merchant dataset: {str(e)}")
+else:
+    st.error("Using a local fallback dataset since 'requests' is not available.")
 
 category_keywords = {
     "Food & Dining": ["restaurant", "food", "dinner", "lunch", "pizza", "cafe", "bar", "mcdonald"],
