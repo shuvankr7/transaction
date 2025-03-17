@@ -75,6 +75,54 @@ category_keywords = {
     "Healthcare": ["hospital", "clinic", "medicine", "doctor", "pharmacy", "health checkup"],
     "Other": []
 }
+category_keywords = {
+    "Food & Dining": [
+        "restaurant", "food", "dinner", "lunch", "pizza", "cafe", "bar", 
+        "mcdonald", "zomato", "swiggy", "dominos", "burger king", "subway",
+        "kfc", "starbucks", "coffee", "snacks", "biryani", "beverage", "tea",
+        "breakfast", "brunch", "dineout"
+    ],
+    
+    "Utilities": [
+        "electricity bill", "water bill", "gas bill", "recharge", "broadband", 
+        "internet", "phone bill", "dth", "postpaid", "prepaid", "wifi", "cable tv",
+        "mobile recharge", "landline", "municipal tax", "sewage", "property tax"
+    ],
+    
+    "Shopping": [
+        "mall", "shopping", "amazon", "flipkart", "store", "clothing", "apparel", 
+        "footwear", "accessories", "electronics", "gadgets", "laptop", "mobile", 
+        "fashion", "jewelry", "eyewear", "furniture", "homedecor", "big bazaar", "reliance trends",
+        "meesho", "tatacliq", "nike", "adidas", "puma"
+    ],
+    
+    "Transport": [
+        "uber", "ola", "bus", "train", "flight", "petrol", "fuel", "cab", "metro",
+        "auto", "rickshaw", "taxi", "diesel", "airfare", "air ticket", "commute",
+        "travel", "bike rental", "car rental", "highway toll", "parking"
+    ],
+    
+    "Entertainment": [
+        "movie", "netflix", "spotify", "concert", "game", "theatre", "amusement park",
+        "cinema", "hotstar", "prime video", "zee5", "bookmyshow", "gaming", "arcade",
+        "pubg", "playstation", "xbox", "cricket", "football", "music festival"
+    ],
+    
+    "Healthcare": [
+        "hospital", "clinic", "medicine", "doctor", "pharmacy", "health checkup", 
+        "dental", "eye test", "surgery", "diagnostic", "pathology", "medical store",
+        "covid test", "therapy", "vaccination", "fitness", "gym", "insurance premium"
+    ],
+    
+    "Education": [
+        "school fees", "college fees", "coaching", "books", "stationery", "tuition", 
+        "exam fee", "online course", "udemy", "coursera", "byju’s", "unacademy",
+        "kindle", "e-learning", "library", "notebooks", "pen", "education loan"
+    ],
+    
+    
+    "Other": []
+}
 TRANSACTION_KEYWORDS = [
     r"\bspent\b", r"\bdebited\b", r"\bcredited\b", r"\btransaction\b",
     r"\bpurchase\b", r"Rs\.?\s?\d+", r"\bsent\b", r"\breceived\b",
