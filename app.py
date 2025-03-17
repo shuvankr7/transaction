@@ -151,9 +151,9 @@ NON_TRANSACTIONAL_KEYWORDS = [
     r"\btrial period\b", r"\brenewal\b", r"\bpolicy due\b", r"\breminder\b", 
     r"\blimited period\b", r"\bpre-book\b", r"\bearly access\b", r"\bexclusive\b", 
     r"\bvalid till\b", r"\btime-limited\b", r"\bterms apply\b", r"\bconditions apply\b",
-    r"\autopay\b"
-    
+    r"\bautopay\b", r"\bsufficient\b"  # Added new keywords here
 ]
+
 BANK_NAMES = [
     "SBI", "State Bank of India",
     "ICICI", "ICICI Bank",
