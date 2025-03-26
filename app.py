@@ -300,7 +300,7 @@ def extract_transaction_details(message):
 
     # transaction_date = datetime.now().strftime("%d-%m-%y")
      # Extract Transaction Date (Handles different formats)
-     date_patterns = [
+    date_patterns = [
          r"(\d{2}[-/]\d{2}[-/]\d{2,4})",     # dd/mm/yy, dd/mm/yyyy, dd-mm-yy, dd-mm-yyyy
          r"(\d{2}\.\d{2}\.\d{2,4})",         # dd.mm.yy, dd.mm.yyyy
          r"(\d{2}[A-Za-z]{3}\d{2,4})",       # ddmmmyy, ddmmmyyyy (e.g., 15MAR25)
