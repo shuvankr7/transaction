@@ -456,6 +456,7 @@ def extract_transaction_details(message):
     tags.remove(None)
     if transaction_type == None and card_type == "Debit Card":
         transaction_type = "Debit"
+    truncated_merchant=truncated_merchant.split()[:2]
 
     return {
         "Amount": amount,
