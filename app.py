@@ -298,52 +298,52 @@ def extract_transaction_details(message):
     else:
       amount = None
 
-    transaction_date = datetime.now().strftime("%d-%m-%y")
-     # # Extract Transaction Date (Handles different formats)
-     # date_patterns = [
-     #     r"(\d{2}[-/]\d{2}[-/]\d{2,4})",     # dd/mm/yy, dd/mm/yyyy, dd-mm-yy, dd-mm-yyyy
-     #     r"(\d{2}\.\d{2}\.\d{2,4})",         # dd.mm.yy, dd.mm.yyyy
-     #     r"(\d{2}[A-Za-z]{3}\d{2,4})",       # ddmmmyy, ddmmmyyyy (e.g., 15MAR25)
-     #     r"([A-Za-z]{3}\d{2}\d{2,4})",       # mmmddyy, mmmddyyyy (e.g., MAR1525)
-     #     r"(\d{2}/\d{2}/\d{2,4})",           # mm/dd/yy, mm/dd/yyyy
-     #     r"(\d{2}-\d{2}-\d{2,4})",           # mm-dd-yy, mm-dd-yyyy
-     #     r"(\d{2}\d{2}\d{2})",               # ddmmyy (without separator, e.g., 150325)
-     #     r"(\d{2}\.\d{2}\.\d{4})",           # mm.dd.yyyy
-     #     r"(\d{2}\.\d{2}\.\d{2})",           # mm.dd.yy
-     #     r"(\d{2}[/.-][A-Za-z]{3}[/.-]\d{2,4})",  # dd/mmm/yy, dd/mmm/yyyy, dd-mmm-yy, dd-mmm-yyyy, dd.mmm.yy, dd.mmm.yyyy
-     # ]
+    # transaction_date = datetime.now().strftime("%d-%m-%y")
+     # Extract Transaction Date (Handles different formats)
+     date_patterns = [
+         r"(\d{2}[-/]\d{2}[-/]\d{2,4})",     # dd/mm/yy, dd/mm/yyyy, dd-mm-yy, dd-mm-yyyy
+         r"(\d{2}\.\d{2}\.\d{2,4})",         # dd.mm.yy, dd.mm.yyyy
+         r"(\d{2}[A-Za-z]{3}\d{2,4})",       # ddmmmyy, ddmmmyyyy (e.g., 15MAR25)
+         r"([A-Za-z]{3}\d{2}\d{2,4})",       # mmmddyy, mmmddyyyy (e.g., MAR1525)
+         r"(\d{2}/\d{2}/\d{2,4})",           # mm/dd/yy, mm/dd/yyyy
+         r"(\d{2}-\d{2}-\d{2,4})",           # mm-dd-yy, mm-dd-yyyy
+         r"(\d{2}\d{2}\d{2})",               # ddmmyy (without separator, e.g., 150325)
+         r"(\d{2}\.\d{2}\.\d{4})",           # mm.dd.yyyy
+         r"(\d{2}\.\d{2}\.\d{2})",           # mm.dd.yy
+         r"(\d{2}[/.-][A-Za-z]{3}[/.-]\d{2,4})",  # dd/mmm/yy, dd/mmm/yyyy, dd-mmm-yy, dd-mmm-yyyy, dd.mmm.yy, dd.mmm.yyyy
+     ]
  
-     # for pattern in date_patterns:
-     #     match = re.search(pattern, message)
-     #     if match:
-     #         date_str = match.group(1)
-     #         break
-     # else:
-     #     date_str = None
+     for pattern in date_patterns:
+         match = re.search(pattern, message)
+         if match:
+             date_str = match.group(1)
+             break
+     else:
+         date_str = None
  
-     # # List of possible date formats to handle different cases
-     # date_formats = [
-     #     "%d/%m/%y", "%d/%m/%Y", "%d-%m-%y", "%d-%m-%Y",  # dd/mm/yy, dd/mm/yyyy
-     #     "%d.%m.%y", "%d.%m.%Y",  # dd.mm.yy, dd.mm.yyyy
-     #     "%d%b%y", "%d%b%Y",      # ddmmmyy, ddmmmyyyy
-     #     "%b%d%y", "%b%d%Y",      # mmmddyy, mmmddyyyy
-     #     "%m/%d/%y", "%m/%d/%Y",  # mm/dd/yy, mm/dd/yyyy
-     #     "%m-%d-%y", "%m-%d-%Y",  # mm-dd-yy, mm-dd-yyyy
-     #     "%m.%d.%y", "%m.%d.%Y",  # mm.dd.yy, mm.dd.yyyy
-     #     "%d%m%y",                # ddmmyy
-     #     "%d/%b/%y", "%d/%b/%Y",  # dd/mmm/yy, dd/mmm/yyyy
-     #     "%d-%b-%y", "%d-%b-%Y",  # dd-mmm-yy, dd-mmm-yyyy
-     #     "%d.%b.%y", "%d.%b.%Y",  # dd.mmm.yy, dd.mmm.yyyy
-     # ]
+     # List of possible date formats to handle different cases
+     date_formats = [
+         "%d/%m/%y", "%d/%m/%Y", "%d-%m-%y", "%d-%m-%Y",  # dd/mm/yy, dd/mm/yyyy
+         "%d.%m.%y", "%d.%m.%Y",  # dd.mm.yy, dd.mm.yyyy
+         "%d%b%y", "%d%b%Y",      # ddmmmyy, ddmmmyyyy
+         "%b%d%y", "%b%d%Y",      # mmmddyy, mmmddyyyy
+         "%m/%d/%y", "%m/%d/%Y",  # mm/dd/yy, mm/dd/yyyy
+         "%m-%d-%y", "%m-%d-%Y",  # mm-dd-yy, mm-dd-yyyy
+         "%m.%d.%y", "%m.%d.%Y",  # mm.dd.yy, mm.dd.yyyy
+         "%d%m%y",                # ddmmyy
+         "%d/%b/%y", "%d/%b/%Y",  # dd/mmm/yy, dd/mmm/yyyy
+         "%d-%b-%y", "%d-%b-%Y",  # dd-mmm-yy, dd-mmm-yyyy
+         "%d.%b.%y", "%d.%b.%Y",  # dd.mmm.yy, dd.mmm.yyyy
+     ]
  
-     # # Try different date formats until successful
-     # for fmt in date_formats:
-     #     try:
-     #         parsed_date = datetime.strptime(date_str, fmt)
-     #         formatted_date = parsed_date.strftime("%d-%m-%y")  # Convert to dd-mm-yy format
-     #         transaction_date = formatted_date
-     #     except ValueError:
-     #         continue
+     # Try different date formats until successful
+     for fmt in date_formats:
+         try:
+             parsed_date = datetime.strptime(date_str, fmt)
+             formatted_date = parsed_date.strftime("%d-%m-%y")  # Convert to dd-mm-yy format
+             transaction_date = formatted_date
+         except ValueError:
+             continue 
 
     # Extract Transaction Type (Credit/Debit)
     transaction_type = None
