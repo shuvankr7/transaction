@@ -8,29 +8,6 @@ st.set_page_config(
     page_icon="💳",
 )
 
-# spacy_model = "en_core_web_sm"
-# try:
-#     nlp = spacy.load(spacy_model)
-# except:
-#     st.error(f"Failed to load spaCy model: {spacy_model}")
-#     st.info("Downloading spaCy model...")
-#     spacy.cli.download(spacy_model)
-#     nlp = spacy.load(spacy_model)
-
-# # Use requests to fetch the file from GitHub with error handling
-# try:
-#     url = "https://raw.githubusercontent.com/shuvankr7/transaction/main/final_merchant_dataset.json"
-#     response = requests.get(url)
-    
-#     if response.status_code == 200:
-#         tag = response.json()
-#     else:
-#         st.error(f"Failed to load merchant dataset. Status code: {response.status_code}")
-#         tag = {}
-# except Exception as e:
-#     st.error(f"Error loading merchant dataset: {str(e)}")
-#     # Fallback to empty dictionary if there's an error
-#     tag = {}
 try:
     import requests
 except ImportError:
