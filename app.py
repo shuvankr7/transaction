@@ -3,6 +3,14 @@ import json
 import spacy
 import streamlit as st
 from datetime import datetime
+import nltk
+from nltk.corpus import stopwords
+
+# Download NLTK stopwords if not already downloaded
+nltk.download('stopwords')
+
+# Load NLTK stopwords
+nltk_stopwords = set(stopwords.words('english'))
 st.set_page_config(
     page_title="Transaction Analyzer",
     page_icon="💳",
