@@ -253,6 +253,34 @@ def extract_transaction_details(message):
 
     if not is_transactional(message):
         return None  # Ignore non-transactional messages
+    entity_pattern = re.compile(r'\b(at|from|to|via|through|with)\s+(.+?)(?=\s+\b(?:at|from|to|via|through|with)|\s*$)', re.IGNORECASE)
+    merchant_pattern = re.compile(r'(?i)(?:\sat\s|in\*)([A-Za-z0-9]*\s?-?\s?[A-Za-z0-9]*\s?-?\s?)')
+    entities = entity_pattern.findall(message)
+    merchants = []
+    for preposition, entity in entities:
+        if preposition.lower() in ['at', 'to']:
+            merchants.append(entity)
+    merchant_match = merchant_pattern.search(message)
+    merchant = merchant_match.group(1).strip() if merchant_match else (merchants[0].strip() if merchants else None)
+    
+    # Filter out merchants that are purely numeric
+    if merchant and merchant.isdigit():
+        merchant = None
+    
+    # Keep the original merchant name intact
+    original_merchant = merchant
+    
+    # Truncate merchant name at the first stopword or invalid character for tag searching
+    truncated_merchant = None
+    if merchant:
+        merchant_parts = merchant.split()
+        truncated_parts = []
+        for part in merchant_parts:
+            if part.lower() in nltk_stopwords:  # Use globally defined nltk_stopwords
+                break
+            truncated_parts.append(part)
+        truncated_merchant = ' '.join(truncated_parts).strip()
+    
 
 
     amount_match = re.search(r"(?i)(?:rs\.?|₹|inr|\$|aed)\s*([\d,]+(?:\.\d{1,2})?)|debited by\s*([\d,]+(?:\.\d{1,2})?)",message,)
@@ -262,53 +290,7 @@ def extract_transaction_details(message):
     else:
       amount = None
 
-        
-    transaction_date = datetime.now().strftime("%d-%m-%y")
-    # # Extract Transaction Date (Handles different formats)
-    # date_patterns = [
-    #     r"(\d{2}[-/]\d{2}[-/]\d{2,4})",     # dd/mm/yy, dd/mm/yyyy, dd-mm-yy, dd-mm-yyyy
-    #     r"(\d{2}\.\d{2}\.\d{2,4})",         # dd.mm.yy, dd.mm.yyyy
-    #     r"(\d{2}[A-Za-z]{3}\d{2,4})",       # ddmmmyy, ddmmmyyyy (e.g., 15MAR25)
-    #     r"([A-Za-z]{3}\d{2}\d{2,4})",       # mmmddyy, mmmddyyyy (e.g., MAR1525)
-    #     r"(\d{2}/\d{2}/\d{2,4})",           # mm/dd/yy, mm/dd/yyyy
-    #     r"(\d{2}-\d{2}-\d{2,4})",           # mm-dd-yy, mm-dd-yyyy
-    #     r"(\d{2}\d{2}\d{2})",               # ddmmyy (without separator, e.g., 150325)
-    #     r"(\d{2}\.\d{2}\.\d{4})",           # mm.dd.yyyy
-    #     r"(\d{2}\.\d{2}\.\d{2})",           # mm.dd.yy
-    #     r"(\d{2}[/.-][A-Za-z]{3}[/.-]\d{2,4})",  # dd/mmm/yy, dd/mmm/yyyy, dd-mmm-yy, dd-mmm-yyyy, dd.mmm.yy, dd.mmm.yyyy
-    # ]
 
-    # for pattern in date_patterns:
-    #     match = re.search(pattern, message)
-    #     if match:
-    #         date_str = match.group(1)
-    #         break
-    # else:
-    #     date_str = None
-
-    # # List of possible date formats to handle different cases
-    # date_formats = [
-    #     "%d/%m/%y", "%d/%m/%Y", "%d-%m-%y", "%d-%m-%Y",  # dd/mm/yy, dd/mm/yyyy
-    #     "%d.%m.%y", "%d.%m.%Y",  # dd.mm.yy, dd.mm.yyyy
-    #     "%d%b%y", "%d%b%Y",      # ddmmmyy, ddmmmyyyy
-    #     "%b%d%y", "%b%d%Y",      # mmmddyy, mmmddyyyy
-    #     "%m/%d/%y", "%m/%d/%Y",  # mm/dd/yy, mm/dd/yyyy
-    #     "%m-%d-%y", "%m-%d-%Y",  # mm-dd-yy, mm-dd-yyyy
-    #     "%m.%d.%y", "%m.%d.%Y",  # mm.dd.yy, mm.dd.yyyy
-    #     "%d%m%y",                # ddmmyy
-    #     "%d/%b/%y", "%d/%b/%Y",  # dd/mmm/yy, dd/mmm/yyyy
-    #     "%d-%b-%y", "%d-%b-%Y",  # dd-mmm-yy, dd-mmm-yyyy
-    #     "%d.%b.%y", "%d.%b.%Y",  # dd.mmm.yy, dd.mmm.yyyy
-    # ]
-
-    # # Try different date formats until successful
-    # for fmt in date_formats:
-    #     try:
-    #         parsed_date = datetime.strptime(date_str, fmt)
-    #         formatted_date = parsed_date.strftime("%d-%m-%y")  # Convert to dd-mm-yy format
-    #         transaction_date = formatted_date
-    #     except ValueError:
-    #         continue
 
     # Extract Transaction Type (Credit/Debit)
     transaction_type = None
@@ -427,7 +409,7 @@ def extract_transaction_details(message):
         "Transaction Type": transaction_type,
         "Bank Name": bank_name,
         "Card Type": card_type,
-        "Merchant": merchant,
+        "Merchant": truncated_merchant,
         "Transaction Mode": transaction_mode,
         "Transaction Date": transaction_date,
         "Reference Number": reference_number,
