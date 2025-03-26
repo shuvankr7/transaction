@@ -322,7 +322,7 @@ def extract_transaction_details(message):
             date_str = None
  
      # List of possible date formats to handle different cases
-     date_formats = [
+    date_formats = [
          "%d/%m/%y", "%d/%m/%Y", "%d-%m-%y", "%d-%m-%Y",  # dd/mm/yy, dd/mm/yyyy
          "%d.%m.%y", "%d.%m.%Y",  # dd.mm.yy, dd.mm.yyyy
          "%d%b%y", "%d%b%Y",      # ddmmmyy, ddmmmyyyy
