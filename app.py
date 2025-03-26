@@ -337,13 +337,13 @@ def extract_transaction_details(message):
      ]
  
      # Try different date formats until successful
-     for fmt in date_formats:
-         try:
-             parsed_date = datetime.strptime(date_str, fmt)
-             formatted_date = parsed_date.strftime("%d-%m-%y")  # Convert to dd-mm-yy format
-             transaction_date = formatted_date
-         except ValueError:
-             continue 
+    for fmt in date_formats:
+        try:
+            parsed_date = datetime.strptime(date_str, fmt)
+            formatted_date = parsed_date.strftime("%d-%m-%y")  # Convert to dd-mm-yy format
+            transaction_date = formatted_date
+        except ValueError:
+            continue 
 
     # Extract Transaction Type (Credit/Debit)
     transaction_type = None
