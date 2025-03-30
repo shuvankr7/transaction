@@ -337,6 +337,7 @@ def extract_transaction_details(message):
      ]
  
      # Try different date formats until successful
+    transaction_date= None
     for fmt in date_formats:
         try:
             parsed_date = datetime.strptime(date_str, fmt)
