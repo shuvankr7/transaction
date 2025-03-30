@@ -279,7 +279,7 @@ def extract_transaction_details(message):
     original_merchant = merchant
     
     # Truncate merchant name at the first stopword or invalid character for tag searching
-    truncated_merchant = None
+    truncated_merchant = ""
     if merchant:
         merchant_parts = merchant.split()
         truncated_parts = []
@@ -343,7 +343,7 @@ def extract_transaction_details(message):
             formatted_date = parsed_date.strftime("%d-%m-%y")  # Convert to dd-mm-yy format
             transaction_date = formatted_date
         except ValueError:
-            transaction_date = NULL 
+            continue
 
     # Extract Transaction Type (Credit/Debit)
     transaction_type = None
